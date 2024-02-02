@@ -1,6 +1,10 @@
 // nodeFactory return { data, leftNode, rightNode }
+const nodeFactory = function (data, nodeLeft, nodeRight) {
+  return { data, nodeLeft, nodeRight };
+};
 
 // treeFactory(array) return { rootNode }
+
 
 // buildTree(array) return { rootNode }
 
