@@ -1,12 +1,63 @@
 // nodeFactory return { data, leftNode, rightNode }
-const nodeFactory = function (data, nodeLeft, nodeRight) {
-  return { data, nodeLeft, nodeRight };
+const nodeFactory = function (data, nodeLeft, nodeRight, nodeLevel) {
+  return { data, nodeLeft, nodeRight, nodeLevel };
+};
+
+// buildTree(array) return { rootNode }
+const buildTree = function (array) {
+  const filterArray = function (array) {
+    const arrayDuplicatesRemoved = [];
+
+    array.forEach((item) => {
+      if (!arrayDuplicatesRemoved.includes(item)) {
+        arrayDuplicatesRemoved.push(item);
+      }
+    });
+
+    const arraySorted = array.sort(function (a, b) {
+      return a - b;
+    });
+
+    return arraySorted;
+  };
+
+  const getRootNode = function (array, startPoint, endPoint, parentLevel) {
+    if (startPoint > endPoint) {
+      return null;
+    }
+    let thisLevel;
+    if (parentLevel === undefined) {
+      thisLevel = 0;
+    } else {
+      thisLevel = parentLevel + 1;
+    }
+    const midPoint = (startPoint + endPoint) / 2;
+    const leftBranch = getRootNode(array, startPoint, midPoint - 1, thisLevel);
+    const rightBranch = getRootNode(array, midPoint + 1, endPoint, thisLevel);
+
+    const rootNode = nodeFactory(
+      array[midPoint],
+      leftBranch,
+      rightBranch,
+      thisLevel
+    );
+
+    return { rootNode };
+  };
+
+  const arrayEnd = array.length - 1;
+
+  const rootNode = getRootNode(filterArray(array), 0, arrayEnd);
+
+  return rootNode;
 };
 
 // treeFactory(array) return { rootNode }
+const treeFactory = function (array) {
+  const rootNode = buildTree(array);
 
-
-// buildTree(array) return { rootNode }
+  return { rootNode };
+};
 
 // test function. src: https://www.theodinproject.com/lessons/javascript-binary-search-trees#assignment
 const prettyPrint = (node, prefix = "", isLeft = true) => {
