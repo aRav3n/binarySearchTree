@@ -1,6 +1,6 @@
 // nodeFactory return { data, leftNode, rightNode }
-const nodeFactory = function (data, nodeLeft, nodeRight, nodeLevel) {
-  return { data, nodeLeft, nodeRight, nodeLevel };
+const nodeFactory = function (data, leftBranch, rightBranch, nodeLevel) {
+  return { data, leftBranch, rightBranch, nodeLevel };
 };
 
 // buildTree(array) return { rootNode }
@@ -74,6 +74,19 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 // inOrder(callback) if !callback return { array }
+const inOrder = function (rootNode, callback) {
+  if (callback !== undefined) {
+    inOrder(rootNode.leftBranch, callback);
+    callback(rootNode);
+    inOrder(rootNode.rightBranch, callback);
+  } else {
+    const array = [];
+    inOrder(rootNode.leftBranch);
+    array.push(rootNode.data);
+    inOrder(rootNode.rightBranch);
+    return array;
+  }
+};
 
 // preOrder(callback) if !callback return { array }
 
