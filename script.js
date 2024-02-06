@@ -121,6 +121,11 @@ const postOrder = function (rootNode, callback) {
 /* reBalance(rootNode)
 Use a traversal method to provide a sorted array then create new tree from this array
 */
+const reBalance = function (rootNode) {
+  const array = inOrder(rootNode);
+  const newTree = treeFactory(array);
+  return newTree;
+}
 
 /* insert(value) 
 Don't use an array to do this, traverse and manipulate the nodes instead */
