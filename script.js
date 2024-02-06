@@ -211,6 +211,23 @@ const deleteItem = function (value, rootNode) {
 };
 
 // find(value) return { nodeWithValue }
+const find = function (value, rootNode) {
+  if (rootNode === null) {
+    console.log(`Sorry, ${value} was not found in this BST`);
+    return null;
+  }
+  const number = Number(value);
+  if (number === rootNode.data) {
+    return rootNode;
+  } else if (number < rootNode.data) {
+    find(value, rootNode.leftBranch);
+  } else if (number > rootNode.data) {
+    find(value, rootNode.rightBranch);
+  } else {
+    console.log(`${value} doesn't appear to be a valid value`);
+    return null;
+  }
+};
 
 /* levelOrder(callbackFunction)
 Traverse in breadth first, execute callback on all nodes at this level
