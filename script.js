@@ -101,9 +101,22 @@ const preOrder = function (rootNode, callback) {
     preOrder(rootNode.rightBranch);
     return array;
   }
-}
+};
 
 // postOrder(callback) if !callback return { array }
+const postOrder = function (rootNode, callback) {
+  if (callback !== undefined) {
+    postOrder(rootNode.leftBranch);
+    postOrder(rootNode.rightBranch);
+    callback(rootNode);
+  } else {
+    const array = [];
+    postOrder(rootNode.leftBranch);
+    postOrder(rootNode.rightBranch);
+    array.push(rootNode.data);
+    return array;
+  }
+};
 
 /* reBalance(rootNode)
 Use a traversal method to provide a sorted array then create new tree from this array
