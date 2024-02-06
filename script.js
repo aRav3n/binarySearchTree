@@ -136,6 +136,7 @@ const insert = function (value, rootNode) {
     if (rootNode.leftBranch === null) {
       const newNode = nodeFactory(number, null, null, rootNode.nodeLevel + 1);
       rootNode.leftBranch = newNode;
+      return true;
     } else {
       insert(value, rootNode.leftBranch);
     }
@@ -143,6 +144,7 @@ const insert = function (value, rootNode) {
     if (rootNode.rightBranch === null) {
       const newNode = nodeFactory(number, null, null, rootNode.nodeLevel + 1);
       rootNode.rightBranch = newNode;
+      return true;
     } else {
       insert(value, rootNode.rightBranch);
     }
@@ -150,11 +152,63 @@ const insert = function (value, rootNode) {
     console.log(
       `Looks like you tried to insert an invalid item; ${value} is either already present in the BST or is not a number.`
     );
+    return false;
   }
+};
+
+// height(node) return { height }
+const height = function (rootNode) {
+  let leftHeight = 0;
+  let rightHeight = 0;
+  let maxHeight;
+  let rightBranchIsLonger = false;
+
+  if (rootNode.leftBranch !== null) {
+    leftHeight++;
+    leftHeight += height(rootNode.leftBranch).maxHeight;
+  }
+
+  if (rootNode.rightBranch !== null) {
+    rightHeight++;
+    rightHeight += height(rootNode).maxHeight;
+  }
+
+  if (rightHeight > leftHeight) {
+    maxHeight = rightHeight;
+    rightBranchIsLonger = true;
+  } else {
+    maxHeight = leftHeight;
+  }
+
+  return { maxHeight, rightBranchIsLonger };
 };
 
 /* delete(value) 
 Don't use an array to do this, traverse and manipulate the nodes instead */
+const deleteItem = function (value, rootNode) {
+  if (rootNode === null) {
+    console.log(`Sorry, ${value} was not found in the BST`);
+  }
+  const number = Number(value);
+  if (number === rootNode.data) {
+    const findNodeWithNoLeftBranch = function (rootNode) {
+      if (rootNode.leftBranch === null) {
+        return rootNode;
+      } else findNodeWithNoLeftBranch(rootNode.leftBranch);
+    };
+    const newParentForLeftBranch = findNodeWithNoLeftBranch(
+      rootNode.rightBranch
+    );
+    newParentForLeftBranch.leftBranch = rootNode.leftBranch;
+    const oldRightBranch = rootNode.rightBranch;
+    rootNode = oldRightBranch;
+    return true;
+  } else if (number < rootNode.data) {
+    deleteItem(value, rootNode.leftBranch);
+  } else if (number > rootNode.data) {
+    deleteItem(value, rootNode.rightBranch);
+  }
+};
 
 // find(value) return { nodeWithValue }
 
@@ -163,8 +217,6 @@ Traverse in breadth first, execute callback on all nodes at this level
 If no callback return { [values] }
 Use an array as a queue to keep track of all child nodes yet to traverse
 */
-
-// height(node) return { height }
 
 // depth(node) return { depthOfThisNode }
 
