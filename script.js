@@ -89,6 +89,19 @@ const inOrder = function (rootNode, callback) {
 };
 
 // preOrder(callback) if !callback return { array }
+const preOrder = function (rootNode, callback) {
+  if (callback !== undefined) {
+    callback(rootNode);
+    preOrder(rootNode.leftBranch, callback);
+    preOrder(rootNode.rightBranch, callback);
+  } else {
+    const array = [];
+    array.push(rootNode.data);
+    preOrder(rootNode.leftBranch);
+    preOrder(rootNode.rightBranch);
+    return array;
+  }
+}
 
 // postOrder(callback) if !callback return { array }
 
