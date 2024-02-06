@@ -9,8 +9,9 @@ const buildTree = function (array) {
     const arrayDuplicatesRemoved = [];
 
     array.forEach((item) => {
-      if (!arrayDuplicatesRemoved.includes(item)) {
-        arrayDuplicatesRemoved.push(item);
+      const number = Number(item);
+      if (!arrayDuplicatesRemoved.includes(number)) {
+        arrayDuplicatesRemoved.push(number);
       }
     });
 
@@ -125,10 +126,32 @@ const reBalance = function (rootNode) {
   const array = inOrder(rootNode);
   const newTree = treeFactory(array);
   return newTree;
-}
+};
 
 /* insert(value) 
 Don't use an array to do this, traverse and manipulate the nodes instead */
+const insert = function (value, rootNode) {
+  const number = Number(value);
+  if (number < rootNode.data) {
+    if (rootNode.leftBranch === null) {
+      const newNode = nodeFactory(number, null, null, rootNode.nodeLevel + 1);
+      rootNode.leftBranch = newNode;
+    } else {
+      insert(value, rootNode.leftBranch);
+    }
+  } else if (number > rootNode.data) {
+    if (rootNode.rightBranch === null) {
+      const newNode = nodeFactory(number, null, null, rootNode.nodeLevel + 1);
+      rootNode.rightBranch = newNode;
+    } else {
+      insert(value, rootNode.rightBranch);
+    }
+  } else {
+    console.log(
+      `Looks like you tried to insert an invalid item; ${value} is either already present in the BST or is not a number.`
+    );
+  }
+};
 
 /* delete(value) 
 Don't use an array to do this, traverse and manipulate the nodes instead */
