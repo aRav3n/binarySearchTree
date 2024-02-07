@@ -1,5 +1,5 @@
 // nodeFactory return { data, leftNode, rightNode }
-const nodeFactory = function (data, leftBranch, rightBranch, nodeLevel) {
+const nodeFactory = function (data, leftBranch, rightBranch) {
   return { data, leftBranch, rightBranch, nodeLevel };
 };
 
@@ -22,26 +22,15 @@ const buildTree = function (array) {
     return arraySorted;
   };
 
-  const getRootNode = function (array, startPoint, endPoint, parentLevel) {
+  const getRootNode = function (array, startPoint, endPoint) {
     if (startPoint > endPoint) {
       return null;
     }
-    let thisLevel;
-    if (parentLevel === undefined) {
-      thisLevel = 0;
-    } else {
-      thisLevel = parentLevel + 1;
-    }
     const midPoint = (startPoint + endPoint) / 2;
-    const leftBranch = getRootNode(array, startPoint, midPoint - 1, thisLevel);
-    const rightBranch = getRootNode(array, midPoint + 1, endPoint, thisLevel);
+    const leftBranch = getRootNode(array, startPoint, midPoint - 1);
+    const rightBranch = getRootNode(array, midPoint + 1, endPoint);
 
-    const rootNode = nodeFactory(
-      array[midPoint],
-      leftBranch,
-      rightBranch,
-      thisLevel
-    );
+    const rootNode = nodeFactory(array[midPoint], leftBranch, rightBranch);
 
     return { rootNode };
   };
@@ -134,7 +123,7 @@ const insert = function (value, rootNode) {
   const number = Number(value);
   if (number < rootNode.data) {
     if (rootNode.leftBranch === null) {
-      const newNode = nodeFactory(number, null, null, rootNode.nodeLevel + 1);
+      const newNode = nodeFactory(number, null, null);
       rootNode.leftBranch = newNode;
       return true;
     } else {
@@ -142,7 +131,7 @@ const insert = function (value, rootNode) {
     }
   } else if (number > rootNode.data) {
     if (rootNode.rightBranch === null) {
-      const newNode = nodeFactory(number, null, null, rootNode.nodeLevel + 1);
+      const newNode = nodeFactory(number, null, null);
       rootNode.rightBranch = newNode;
       return true;
     } else {
@@ -229,11 +218,42 @@ const find = function (value, rootNode) {
   }
 };
 
-/* levelOrder(callbackFunction)
+/* levelOrder(callback)
 Traverse in breadth first, execute callback on all nodes at this level
 If no callback return { [values] }
 Use an array as a queue to keep track of all child nodes yet to traverse
 */
+const levelOrder = function (rootNode, callback) {
+  const queue = [];
+  const outputArray = [];
+  const dealWithNode = function (node) {
+    if (callback !== undefined) {
+      callback(node);
+    } else {
+      outputArray.push(node.data);
+    }
+  };
+  queue.push(rootNode);
+  while (queue.length > 0) {
+    const tempNode = queue[0];
+    queue.shift();
+
+    dealWithNode(tempNode);
+
+    if (tempNode.leftBranch !== null) {
+      queue.push(tempNode.leftBranch);
+    }
+
+    if (tempNode.rightBranch !== null) {
+      queue.push(tempNode.rightBranch);
+    }
+  }
+
+  if (outputArray.length > 0) {
+    return outputArray;
+  }
+  return true;
+};
 
 // depth(node) return { depthOfThisNode }
 
