@@ -255,9 +255,36 @@ const levelOrder = function (rootNode, callback) {
   return true;
 };
 
-// depth(node) return { depthOfThisNode }
+// depth(node) return depthOfThisNode
+const depth = function (node, rootNode) {
+  let depthCount = 0;
+  const traverseTree = function (thisNode) {
+    if (thisNode === null) {
+      console.log("This is awkward but that node wasn't found in the BST.");
+      return;
+    }
+    if (node === rootNode) {
+      return depthCount;
+    } else {
+      const thisNodeValue = thisNode.data;
+      const rootNodeValue = rootNode.data;
+      if (thisNodeValue < rootNodeValue) {
+        depthCount++;
+        traverseTree(thisNode.leftBranch);
+      } else if (thisNodeValue > rootNodeValue) {
+        depthCount++;
+        traverseTree(thisNode.rightBranch);
+      } else {
+        console.log(
+          "There seems to be an issue with traverseTree() inside of depth()"
+        );
+      }
+    }
+  };
+  return depthCount;
+};
 
-// isBalanced() return { boolean }
+// isBalanced() return boolean
 
 /* test()
 Create BST from random array.length <100
