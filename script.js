@@ -285,6 +285,23 @@ const depth = function (node, rootNode) {
 };
 
 // isBalanced() return boolean
+const isBalanced = function (rootNode) {
+  const leftSide = rootNode.leftBranch;
+  const rightSide = rootNode.rightBranch;
+  if (leftSide === null) {
+    if (height(rightSide) > 1) {
+      return false;
+    }
+  } else if (rightSide === null) {
+    if (height(leftSide) > 1) {
+      return false;
+    }
+  } else {
+    isBalanced(leftSide);
+    isBalanced(rightSide);
+  }
+  return true;
+};
 
 /* test()
 Create BST from random array.length <100
