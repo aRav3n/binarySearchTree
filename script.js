@@ -346,17 +346,9 @@ const isBalanced = function (rootNode) {
   return true;
 };
 
-/* test()
-Create BST from random array.length <100
-Call isBalanced() to confirm
-Print out all elements in level, pre, post, and in order
-Unbalance the tree by adding several numbers > 100
-Confirm that the tree is unbalanced by calling isBalanced
-Balance the tree by calling reBalance()
-Confirm that the tree is balanced by calling isBalanced()
-Print out all elements in level, pre, post, and in order
-*/
+// test()
 const test = function () {
+  // Create BST from random array.length <100
   const randomNumGen = function generateRandomNumberUnderOneHundred() {
     const randomNum = 1000 * Math.random();
     const roundedNum = Math.floor(randomNum);
@@ -371,11 +363,15 @@ const test = function () {
   };
   const array = randomArray();
   let testTree = treeFactory(array);
+
+  // Call isBalanced() to confirm balance of tree
   if (isBalanced(testTree)) {
     console.log("Good; the tree is balanced!");
   } else {
     console.log("Oh no; the tree is unbalanced!");
   }
+
+  // Print out all elements in level, pre, post, and in order
   const printOrderArrays = function () {
     const arrayLevelOrder = levelOrder(testTree);
     const arrayPreOrder = preOrder(testTree);
@@ -391,7 +387,9 @@ const test = function () {
     console.log(arrayInOrder);
   };
   printOrderArrays();
-  (function addRandomNumbersToATree() {
+
+  // Unbalance the tree by adding several numbers > 100
+  const addRandomNumbers = function addRandomNumbersToATree() {
     for (let i = 0; i < 100; i++) {
       const number = randomNumGen();
       if (find(number, testTree) === null) {
@@ -399,7 +397,10 @@ const test = function () {
       }
     }
     console.log("Random numbers added to the tree.");
-  })();
+  };
+  addRandomNumbers();
+
+  // Confirm that the tree is unbalanced by calling isBalanced
   if (isBalanced(testTree)) {
     console.log("Oh no; the tree is balanced! (it shouldn't be at this point)");
   } else {
@@ -407,13 +408,18 @@ const test = function () {
       "Good; the tree is unbalanced! (it should be unbalanced here so good work)"
     );
   }
+
+  // Balance the tree by calling reBalance()
   testTree = reBalance(testTree);
+
+  // Confirm that the tree is balanced by calling isBalanced()
   if (isBalanced(testTree)) {
     console.log("Cool cool cool; the tree is balanced!");
   } else {
     console.log("Oh no; the tree is unbalanced!");
   }
-  console.log("Here's a prettyPrint() of the tree:");
+
+  // Print out all elements in level, pre, post, and in order
   printOrderArrays();
 };
 
