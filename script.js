@@ -173,12 +173,8 @@ const insert = function (value, rootNode) {
     } else {
       insert(value, rootNode.rightBranch);
     }
-  } else {
-    console.log(
-      `Looks like you tried to insert an invalid item; ${value} is either already present in the BST or is not a number.`
-    );
-    return false;
   }
+  return false;
 };
 
 // height(node) return { height }
@@ -238,23 +234,24 @@ const deleteItem = function (value, rootNode) {
   }
 };
 
-// find(value) return { nodeWithValue }
+// find(value) return nodeWithValue
 const find = function (value, rootNode) {
-  if (rootNode === null) {
-    console.log(`Sorry, ${value} was not found in this BST`);
-    return null;
+  if (rootNode !== null) {
+    const number = Number(value);
+    if (number === rootNode.data) {
+      console.log(rootNode);
+      return rootNode;
+    } else if (number < rootNode.data) {
+      find(value, rootNode.leftBranch);
+    } else if (number > rootNode.data) {
+      find(value, rootNode.rightBranch);
+    } else {
+      console.log(`${value} doesn't appear to be a valid value`);
+      return null;
+    }
   }
-  const number = Number(value);
-  if (number === rootNode.data) {
-    return rootNode;
-  } else if (number < rootNode.data) {
-    find(value, rootNode.leftBranch);
-  } else if (number > rootNode.data) {
-    find(value, rootNode.rightBranch);
-  } else {
-    console.log(`${value} doesn't appear to be a valid value`);
-    return null;
-  }
+  console.log(`${value} was not found in this BST`);
+  return null;
 };
 
 /* levelOrder(callback)
@@ -392,9 +389,7 @@ const test = function () {
   const addRandomNumbers = function addRandomNumbersToATree() {
     for (let i = 0; i < 100; i++) {
       const number = randomNumGen();
-      if (find(number, testTree) === null) {
-        insert(number, testTree);
-      }
+      insert(number, testTree);
     }
     console.log("Random numbers added to the tree.");
   };
