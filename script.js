@@ -260,10 +260,10 @@ const depth = function (node, rootNode) {
   let depthCount = 0;
   const traverseTree = function (thisNode) {
     if (thisNode === null) {
-      console.log("This is awkward but that node wasn't found in the BST.");
+      console.log("This is awkward but that node wasn't found in the tree.");
       return;
     }
-    if (node === rootNode) {
+    if (thisNode === rootNode) {
       return depthCount;
     } else {
       const thisNodeValue = thisNode.data;
@@ -281,7 +281,7 @@ const depth = function (node, rootNode) {
       }
     }
   };
-  return depthCount;
+  traverseTree(node);
 };
 
 // isBalanced() return boolean
