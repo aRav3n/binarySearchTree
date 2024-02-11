@@ -329,8 +329,24 @@ const test = function () {
   const array = randomArray();
   const testTree = treeFactory(array);
   if (isBalanced(testTree)) {
-    console.log("The tree appears to be balanced!")
+    console.log("Good; the tree is balanced!");
   } else {
-    console.log("Your tree doesn't appear to be balanced")
-  };
+    console.log("Oh no; the tree is unbalanced!");
+  }
+  console.log("Here's a prettyPrint() of the tree:");
+  prettyPrint(testTree);
+  const addRandomToTree = (function addRandomNumbersToATree(rootNode) {
+    for (let i = 0; i < 100; i++) {
+      const number = randomNumGen();
+      if (find(number, testTree) === null) {
+        insert(number, testTree);
+      }
+    }
+    console.log("Random numbers added to the tree.")
+  })();
+  if (isBalanced(testTree)) {
+    console.log("Oh no; the tree is balanced! (it shouldn't be at this point)");
+  } else {
+    console.log("Oh no; the tree is unbalanced! (it should be unbalanced here so good work)");
+  }
 };
