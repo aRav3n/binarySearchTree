@@ -327,7 +327,7 @@ const test = function () {
     return array;
   };
   const array = randomArray();
-  const testTree = treeFactory(array);
+  let testTree = treeFactory(array);
   if (isBalanced(testTree)) {
     console.log("Good; the tree is balanced!");
   } else {
@@ -351,12 +351,26 @@ const test = function () {
       "Good; the tree is unbalanced! (it should be unbalanced here so good work)"
     );
   }
-  const testTreeReBalanced = reBalance(testTree);
-  if (isBalanced(testTreeReBalanced)) {
+  testTree = reBalance(testTree);
+  if (isBalanced(testTree)) {
     console.log("Cool cool cool; the tree is balanced!");
   } else {
     console.log("Oh no; the tree is unbalanced!");
   }
   console.log("Here's a prettyPrint() of the tree:");
   prettyPrint(testTree);
+  const arrayLevelOrder = levelOrder(testTree);
+  const arrayPreOrder = preOrder(testTree);
+  const arrayPostOrder = postOrder(testTree);
+  const arrayInOrder = inOrder(testTree);
+  console.log("level order array:");
+  console.log(arrayLevelOrder);
+  console.log("pre order array:");
+  console.log(arrayPreOrder);
+  console.log("post order array:");
+  console.log(arrayPostOrder);
+  console.log("in order array:");
+  console.log(arrayInOrder);
 };
+
+test();
