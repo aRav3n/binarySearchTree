@@ -9,7 +9,7 @@ const buildTree = function (array) {
     const arrayDuplicatesRemoved = [];
 
     array.forEach((item) => {
-      const number = Number(item);
+      const number = item + 0;
       if (!arrayDuplicatesRemoved.includes(number)) {
         arrayDuplicatesRemoved.push(number);
       }
@@ -18,7 +18,6 @@ const buildTree = function (array) {
     const arraySorted = array.sort(function (a, b) {
       return a - b;
     });
-
     return arraySorted;
   };
 
@@ -26,18 +25,19 @@ const buildTree = function (array) {
     if (startPoint > endPoint) {
       return null;
     }
-    const midPoint = (startPoint + endPoint) / 2;
+    const midPoint = Math.floor((startPoint + endPoint) / 2);
+    const midPointData = array[midPoint];
     const leftBranch = getRootNode(array, startPoint, midPoint - 1);
     const rightBranch = getRootNode(array, midPoint + 1, endPoint);
 
-    const rootNode = nodeFactory(array[midPoint], leftBranch, rightBranch);
+    const rootNode = nodeFactory(midPointData, leftBranch, rightBranch);
 
     return { rootNode };
   };
 
   const arrayEnd = array.length - 1;
-
-  const rootNode = getRootNode(filterArray(array), 0, arrayEnd);
+  const filteredArray = filterArray(array);
+  const rootNode = getRootNode(filteredArray, 0, arrayEnd);
 
   return rootNode;
 };
@@ -288,6 +288,7 @@ const depth = function (node, rootNode) {
 const isBalanced = function (rootNode) {
   const leftSide = rootNode.leftBranch;
   const rightSide = rootNode.rightBranch;
+
   if (leftSide === null) {
     if (height(rightSide) > 1) {
       return false;
@@ -328,6 +329,7 @@ const test = function () {
   };
   const array = randomArray();
   let testTree = treeFactory(array);
+  console.log(testTree);
   if (isBalanced(testTree)) {
     console.log("Good; the tree is balanced!");
   } else {
