@@ -315,7 +315,7 @@ Print out all elements in level, pre, post, and in order
 */
 const test = function () {
   const randomNumGen = function generateRandomNumberUnderOneHundred() {
-    const randomNum = 100 * Math.random();
+    const randomNum = 1000 * Math.random();
     const roundedNum = Math.floor(randomNum);
     return roundedNum;
   };
@@ -335,18 +335,28 @@ const test = function () {
   }
   console.log("Here's a prettyPrint() of the tree:");
   prettyPrint(testTree);
-  const addRandomToTree = (function addRandomNumbersToATree(rootNode) {
+  (function addRandomNumbersToATree() {
     for (let i = 0; i < 100; i++) {
       const number = randomNumGen();
       if (find(number, testTree) === null) {
         insert(number, testTree);
       }
     }
-    console.log("Random numbers added to the tree.")
+    console.log("Random numbers added to the tree.");
   })();
   if (isBalanced(testTree)) {
     console.log("Oh no; the tree is balanced! (it shouldn't be at this point)");
   } else {
-    console.log("Oh no; the tree is unbalanced! (it should be unbalanced here so good work)");
+    console.log(
+      "Good; the tree is unbalanced! (it should be unbalanced here so good work)"
+    );
   }
+  const testTreeReBalanced = reBalance(testTree);
+  if (isBalanced(testTreeReBalanced)) {
+    console.log("Cool cool cool; the tree is balanced!");
+  } else {
+    console.log("Oh no; the tree is unbalanced!");
+  }
+  console.log("Here's a prettyPrint() of the tree:");
+  prettyPrint(testTree);
 };
