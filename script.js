@@ -3,22 +3,25 @@ const nodeFactory = function (data, leftBranch, rightBranch) {
   return { data, leftBranch, rightBranch };
 };
 
-// buildTree(array) return { rootNode }
+// buildTree(array) return rootNode
 const buildTree = function (array) {
   const filterArray = function (array) {
-    const arrayDuplicatesRemoved = [];
-
-    array.forEach((item) => {
-      const number = item + 0;
-      if (!arrayDuplicatesRemoved.includes(number)) {
-        arrayDuplicatesRemoved.push(number);
-      }
-    });
-
     const arraySorted = array.sort(function (a, b) {
       return a - b;
     });
-    return arraySorted;
+    const arrayDuplicatesRemoved = [];
+    while (arraySorted.length > 0) {
+      const nextNumber = arraySorted.shift();
+      const newArrayTopSpot = arrayDuplicatesRemoved.length - 1;
+      if (
+        nextNumber !== arrayDuplicatesRemoved[newArrayTopSpot] ||
+        arrayDuplicatesRemoved.length === 0
+      ) {
+        arrayDuplicatesRemoved.push(nextNumber);
+      }
+    }
+
+    return arrayDuplicatesRemoved;
   };
 
   const getRootNode = function (array, startPoint, endPoint) {
@@ -32,21 +35,23 @@ const buildTree = function (array) {
 
     const rootNode = nodeFactory(midPointData, leftBranch, rightBranch);
 
-    return { rootNode };
+    return rootNode;
   };
 
   const arrayEnd = array.length - 1;
   const filteredArray = filterArray(array);
+  console.log("filtered array:");
+  console.log(filteredArray);
   const rootNode = getRootNode(filteredArray, 0, arrayEnd);
 
   return rootNode;
 };
 
-// treeFactory(array) return { rootNode }
+// treeFactory(array) return rootNode
 const treeFactory = function (array) {
   const rootNode = buildTree(array);
 
-  return { rootNode };
+  return rootNode;
 };
 
 // test function. src: https://www.theodinproject.com/lessons/javascript-binary-search-trees#assignment
@@ -54,56 +59,87 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
     return;
   }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+  if (node.rightBranch !== null) {
+    prettyPrint(
+      node.rightBranch,
+      `${prefix}${isLeft ? "│   " : "    "}`,
+      false
+    );
   }
   console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  if (node.leftBranch !== null) {
+    prettyPrint(node.leftBranch, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
 
 // inOrder(callback) if !callback return { array }
 const inOrder = function (rootNode, callback) {
+  if (rootNode === null) {
+    return;
+  }
   if (callback !== undefined) {
     inOrder(rootNode.leftBranch, callback);
     callback(rootNode);
     inOrder(rootNode.rightBranch, callback);
   } else {
     const array = [];
-    inOrder(rootNode.leftBranch);
-    array.push(rootNode.data);
-    inOrder(rootNode.rightBranch);
+    const buildArray = function (node) {
+      if (node === null) {
+        return;
+      }
+      buildArray(node.leftBranch);
+      array.push(node.data);
+      buildArray(node.rightBranch);
+    };
+    buildArray(rootNode);
     return array;
   }
 };
 
 // preOrder(callback) if !callback return { array }
 const preOrder = function (rootNode, callback) {
+  if (rootNode === null) {
+    return;
+  }
   if (callback !== undefined) {
     callback(rootNode);
     preOrder(rootNode.leftBranch, callback);
     preOrder(rootNode.rightBranch, callback);
   } else {
     const array = [];
-    array.push(rootNode.data);
-    preOrder(rootNode.leftBranch);
-    preOrder(rootNode.rightBranch);
+    const buildArray = function (node) {
+      if (node === null) {
+        return;
+      }
+      array.push(node.data);
+      buildArray(node.leftBranch);
+      buildArray(node.rightBranch);
+    };
+    buildArray(rootNode);
     return array;
   }
 };
 
 // postOrder(callback) if !callback return { array }
 const postOrder = function (rootNode, callback) {
+  if (rootNode === null) {
+    return;
+  }
   if (callback !== undefined) {
     postOrder(rootNode.leftBranch);
     postOrder(rootNode.rightBranch);
     callback(rootNode);
   } else {
     const array = [];
-    postOrder(rootNode.leftBranch);
-    postOrder(rootNode.rightBranch);
-    array.push(rootNode.data);
+    const buildArray = function (node) {
+      if (node === null) {
+        return;
+      }
+      buildArray(node.leftBranch);
+      buildArray(node.rightBranch);
+      array.push(node.data);
+    };
+    buildArray(rootNode);
     return array;
   }
 };
@@ -147,6 +183,9 @@ const insert = function (value, rootNode) {
 
 // height(node) return { height }
 const height = function (rootNode) {
+  if (rootNode === null) {
+    return;
+  }
   let leftHeight = 0;
   let rightHeight = 0;
   let maxHeight;
@@ -224,6 +263,9 @@ If no callback return { [values] }
 Use an array as a queue to keep track of all child nodes yet to traverse
 */
 const levelOrder = function (rootNode, callback) {
+  if (rootNode === null) {
+    return;
+  }
   const queue = [];
   const outputArray = [];
   const dealWithNode = function (node) {
@@ -297,7 +339,7 @@ const isBalanced = function (rootNode) {
     if (height(leftSide) > 1) {
       return false;
     }
-  } else {
+  } else if (leftSide !== undefined && rightSide !== undefined) {
     isBalanced(leftSide);
     isBalanced(rightSide);
   }
@@ -329,14 +371,26 @@ const test = function () {
   };
   const array = randomArray();
   let testTree = treeFactory(array);
-  console.log(testTree);
   if (isBalanced(testTree)) {
     console.log("Good; the tree is balanced!");
   } else {
     console.log("Oh no; the tree is unbalanced!");
   }
-  console.log("Here's a prettyPrint() of the tree:");
-  prettyPrint(testTree);
+  const printOrderArrays = function () {
+    const arrayLevelOrder = levelOrder(testTree);
+    const arrayPreOrder = preOrder(testTree);
+    const arrayPostOrder = postOrder(testTree);
+    const arrayInOrder = inOrder(testTree);
+    console.log("level order array:");
+    console.log(arrayLevelOrder);
+    console.log("pre order array:");
+    console.log(arrayPreOrder);
+    console.log("post order array:");
+    console.log(arrayPostOrder);
+    console.log("in order array:");
+    console.log(arrayInOrder);
+  };
+  printOrderArrays();
   (function addRandomNumbersToATree() {
     for (let i = 0; i < 100; i++) {
       const number = randomNumGen();
@@ -360,19 +414,7 @@ const test = function () {
     console.log("Oh no; the tree is unbalanced!");
   }
   console.log("Here's a prettyPrint() of the tree:");
-  prettyPrint(testTree);
-  const arrayLevelOrder = levelOrder(testTree);
-  const arrayPreOrder = preOrder(testTree);
-  const arrayPostOrder = postOrder(testTree);
-  const arrayInOrder = inOrder(testTree);
-  console.log("level order array:");
-  console.log(arrayLevelOrder);
-  console.log("pre order array:");
-  console.log(arrayPreOrder);
-  console.log("post order array:");
-  console.log(arrayPostOrder);
-  console.log("in order array:");
-  console.log(arrayInOrder);
+  printOrderArrays();
 };
 
 test();
