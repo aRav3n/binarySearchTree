@@ -185,7 +185,6 @@ const height = function (rootNode) {
   let leftHeight = 0;
   let rightHeight = 0;
   let maxHeight;
-  let rightBranchIsLonger = false;
 
   if (rootNode.leftBranch !== null) {
     leftHeight++;
@@ -194,17 +193,16 @@ const height = function (rootNode) {
 
   if (rootNode.rightBranch !== null) {
     rightHeight++;
-    rightHeight += height(rootNode).maxHeight;
+    rightHeight += height(rootNode.rightBranch).maxHeight;
   }
 
   if (rightHeight > leftHeight) {
     maxHeight = rightHeight;
-    rightBranchIsLonger = true;
   } else {
     maxHeight = leftHeight;
   }
 
-  return { maxHeight, rightBranchIsLonger };
+  return maxHeight;
 };
 
 /* delete(value) 
