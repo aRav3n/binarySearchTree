@@ -313,3 +313,24 @@ Balance the tree by calling reBalance()
 Confirm that the tree is balanced by calling isBalanced()
 Print out all elements in level, pre, post, and in order
 */
+const test = function () {
+  const randomNumGen = function generateRandomNumberUnderOneHundred() {
+    const randomNum = 100 * Math.random();
+    const roundedNum = Math.floor(randomNum);
+    return roundedNum;
+  };
+  const randomArray = function () {
+    const array = [];
+    for (let i = 0; i < 100; i++) {
+      array.push(randomNumGen());
+    }
+    return array;
+  };
+  const array = randomArray();
+  const testTree = treeFactory(array);
+  if (isBalanced(testTree)) {
+    console.log("The tree appears to be balanced!")
+  } else {
+    console.log("Your tree doesn't appear to be balanced")
+  };
+};
