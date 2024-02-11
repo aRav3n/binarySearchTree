@@ -1,6 +1,6 @@
 // nodeFactory return { data, leftNode, rightNode }
 const nodeFactory = function (data, leftBranch, rightBranch) {
-  return { data, leftBranch, rightBranch, nodeLevel };
+  return { data, leftBranch, rightBranch };
 };
 
 // buildTree(array) return { rootNode }
