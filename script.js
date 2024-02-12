@@ -381,9 +381,6 @@ const test = function () {
   };
   addRandomNumbers();
 
-  const treeHeight = height(testTree);
-  console.log(`testTree height: ${treeHeight}`);
-
   // Confirm that the tree is unbalanced by calling isBalanced
   if (isBalanced(testTree)) {
     console.log("Oh no; the tree is balanced! (it shouldn't be at this point)");
@@ -392,9 +389,8 @@ const test = function () {
       "Good; the tree is unbalanced! (it should be unbalanced here so good work)"
     );
   }
-  console.log(isBalanced(testTree));
 
-  /*  // Balance the tree by calling reBalance()
+  // Balance the tree by calling reBalance()
   testTree = reBalance(testTree);
 
   // Confirm that the tree is balanced by calling isBalanced()
@@ -406,7 +402,6 @@ const test = function () {
 
   // Print out all elements in level, pre, post, and in order
   printOrderArrays();
-  */
 };
 
 test();
