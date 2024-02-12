@@ -1,5 +1,7 @@
 // nodeFactory return { data, leftNode, rightNode }
-const nodeFactory = function (data, leftBranch, rightBranch) {
+const nodeFactory = function (data) {
+  let leftBranch = null;
+  let rightBranch = null;
   return { data, leftBranch, rightBranch };
 };
 
@@ -30,20 +32,17 @@ const buildTree = function (array) {
     }
     const midPoint = Math.floor((startPoint + endPoint) / 2);
     const midPointData = array[midPoint];
-    const leftBranch = getRootNode(array, startPoint, midPoint - 1);
-    const rightBranch = getRootNode(array, midPoint + 1, endPoint);
 
-    const rootNode = nodeFactory(midPointData, leftBranch, rightBranch);
+    let rootNode = nodeFactory(midPointData);
+    rootNode.leftBranch = getRootNode(array, startPoint, midPoint - 1);
+    rootNode.rightBranch = getRootNode(array, midPoint + 1, endPoint);
 
     return rootNode;
   };
 
-  const arrayEnd = array.length - 1;
   const filteredArray = filterArray(array);
-  console.log("filtered array:");
-  console.log(filteredArray);
+  const arrayEnd = filteredArray.length - 1;
   const rootNode = getRootNode(filteredArray, 0, arrayEnd);
-
   return rootNode;
 };
 
@@ -159,7 +158,7 @@ const insert = function (value, rootNode) {
   const number = Number(value);
   if (number < rootNode.data) {
     if (rootNode.leftBranch === null) {
-      const newNode = nodeFactory(number, null, null);
+      const newNode = nodeFactory(number);
       rootNode.leftBranch = newNode;
       return true;
     } else {
@@ -167,7 +166,7 @@ const insert = function (value, rootNode) {
     }
   } else if (number > rootNode.data) {
     if (rootNode.rightBranch === null) {
-      const newNode = nodeFactory(number, null, null);
+      const newNode = nodeFactory(number);
       rootNode.rightBranch = newNode;
       return true;
     } else {
@@ -179,38 +178,13 @@ const insert = function (value, rootNode) {
 
 // height(node) return height
 const height = function (rootNode) {
-<<<<<<< HEAD
   if (rootNode === null || rootNode === undefined) {
     return 0;
-=======
-  if (rootNode === null) {
-    return;
-  }
-  let leftHeight = 0;
-  let rightHeight = 0;
-  let maxHeight;
-  let rightBranchIsLonger = false;
-
-  if (rootNode.leftBranch !== null) {
-    leftHeight++;
-    leftHeight += height(rootNode.leftBranch).maxHeight;
-  }
-
-  if (rootNode.rightBranch !== null) {
-    rightHeight++;
-    rightHeight += height(rootNode).maxHeight;
-  }
-
-  if (rightHeight > leftHeight) {
-    maxHeight = rightHeight;
-    rightBranchIsLonger = true;
->>>>>>> parent of 9e64433 (Fix height())
   } else {
     let leftHeight = 0;
     let rightHeight = 0;
     let maxHeight;
 
-<<<<<<< HEAD
     if (rootNode.leftBranch !== null && rootNode.leftBranch !== undefined) {
       leftHeight++;
       leftHeight += height(rootNode.leftBranch).maxHeight;
@@ -229,9 +203,6 @@ const height = function (rootNode) {
 
     return maxHeight;
   }
-=======
-  return { maxHeight, rightBranchIsLonger };
->>>>>>> parent of 9e64433 (Fix height())
 };
 
 /* delete(value) 
@@ -382,9 +353,9 @@ const test = function () {
   };
   const array = randomArray();
   let testTree = treeFactory(array);
-  prettyPrint(testTree);
+  // prettyPrint(testTree);
 
-  // Call isBalanced() to confirm balance of tree
+  /*  // Call isBalanced() to confirm balance of tree
   if (isBalanced(testTree)) {
     console.log("Good; the tree is balanced!");
   } else {
@@ -439,6 +410,7 @@ const test = function () {
 
   // Print out all elements in level, pre, post, and in order
   printOrderArrays();
+  */
 };
 
 test();
