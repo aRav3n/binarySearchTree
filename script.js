@@ -178,31 +178,15 @@ const insert = function (value, rootNode) {
 
 // height(node) return height
 const height = function (rootNode) {
-  if (rootNode === null || rootNode === undefined) {
-    return 0;
-  } else {
-    let leftHeight = 0;
-    let rightHeight = 0;
-    let maxHeight;
-
-    if (rootNode.leftBranch !== null && rootNode.leftBranch !== undefined) {
-      leftHeight++;
-      leftHeight += height(rootNode.leftBranch).maxHeight;
-    }
-
-    if (rootNode.rightBranch !== null && rootNode.rightBranch !== undefined) {
-      rightHeight++;
-      rightHeight += height(rootNode.rightBranch).maxHeight;
-    }
-
-    if (rightHeight > leftHeight) {
-      maxHeight = rightHeight;
-    } else {
-      maxHeight = leftHeight;
-    }
-
-    return maxHeight;
+  if (rootNode === null) {
+    return -1;
   }
+
+  let leftHeight = 1 + height(rootNode.leftBranch);
+  let rightHeight = 1 + height(rootNode.rightBranch);
+
+  const maxHeight = Math.max(leftHeight, rightHeight);
+  return maxHeight;
 };
 
 /* delete(value) 
@@ -323,15 +307,24 @@ const depth = function (node, rootNode) {
 
 // isBalanced() return boolean
 const isBalanced = function (node) {
-  if (node !== null) {
-    if (node.leftBranch === null && height(node.rightBranch) > 1) {
+  if (node === null) {
+    console.log("You tried to check balance on a null node.");
+    return undefined;
+  }
+  if (node.leftBranch === null) {
+    const rightBranchHeight = height(node.rightBranch);
+    if (rightBranchHeight > 1) {
       return false;
-    } else if (node.rightBranch === null && height(node.leftBranch > 1)) {
-      return false;
-    } else {
-      isBalanced(node.leftBranch);
-      isBalanced(node.rightBranch);
     }
+  } else if (node.rightBranch === null) {
+    const leftBranchHeight = height(node.leftBranch);
+    if (leftBranchHeight > 1) {
+      return false;
+    }
+  } else if (!isBalanced(node.leftBranch)) {
+    return false;
+  } else if (!isBalanced(node.rightBranch)) {
+    return false;
   }
   return true;
 };
@@ -353,9 +346,8 @@ const test = function () {
   };
   const array = randomArray();
   let testTree = treeFactory(array);
-  // prettyPrint(testTree);
 
-  /*  // Call isBalanced() to confirm balance of tree
+  // Call isBalanced() to confirm balance of tree
   if (isBalanced(testTree)) {
     console.log("Good; the tree is balanced!");
   } else {
@@ -389,6 +381,9 @@ const test = function () {
   };
   addRandomNumbers();
 
+  const treeHeight = height(testTree);
+  console.log(`testTree height: ${treeHeight}`);
+
   // Confirm that the tree is unbalanced by calling isBalanced
   if (isBalanced(testTree)) {
     console.log("Oh no; the tree is balanced! (it shouldn't be at this point)");
@@ -397,8 +392,9 @@ const test = function () {
       "Good; the tree is unbalanced! (it should be unbalanced here so good work)"
     );
   }
+  console.log(isBalanced(testTree));
 
-  // Balance the tree by calling reBalance()
+  /*  // Balance the tree by calling reBalance()
   testTree = reBalance(testTree);
 
   // Confirm that the tree is balanced by calling isBalanced()
