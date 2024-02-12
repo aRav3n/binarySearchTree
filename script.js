@@ -1,3 +1,11 @@
+// Print items to web page instead of console
+const printToPage = function (itemToPrint) {
+  const bodyElement = document.querySelector("body");
+  const newP = document.createElement("p");
+  newP.innerHTML = itemToPrint;
+  bodyElement.appendChild(newP);
+};
+
 // nodeFactory return { data, leftNode, rightNode }
 const nodeFactory = function (data, leftBranch, rightBranch) {
   return { data, leftBranch, rightBranch };
@@ -40,8 +48,8 @@ const buildTree = function (array) {
 
   const arrayEnd = array.length - 1;
   const filteredArray = filterArray(array);
-  console.log("filtered array:");
-  console.log(filteredArray);
+  printToPage("filtered array:");
+  printToPage(filteredArray);
   const rootNode = getRootNode(filteredArray, 0, arrayEnd);
 
   return rootNode;
@@ -66,7 +74,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
       false
     );
   }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+  `printToPage`(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
   if (node.leftBranch !== null) {
     prettyPrint(node.leftBranch, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
@@ -177,15 +185,16 @@ const insert = function (value, rootNode) {
   return false;
 };
 
-// height(node) return { height }
+// height(node) return height
 const height = function (rootNode) {
   if (rootNode === null) {
-    return;
+    return 0;
   }
   let leftHeight = 0;
   let rightHeight = 0;
   let maxHeight;
 
+  printToPage(rootNode.leftBranch);
   if (rootNode.leftBranch !== null) {
     leftHeight++;
     leftHeight += height(rootNode.leftBranch).maxHeight;
@@ -209,7 +218,7 @@ const height = function (rootNode) {
 Don't use an array to do this, traverse and manipulate the nodes instead */
 const deleteItem = function (value, rootNode) {
   if (rootNode === null) {
-    console.log(`Sorry, ${value} was not found in the BST`);
+    printToPage(`Sorry, ${value} was not found in the BST`);
   }
   const number = Number(value);
   if (number === rootNode.data) {
@@ -237,18 +246,18 @@ const find = function (value, rootNode) {
   if (rootNode !== null) {
     const number = Number(value);
     if (number === rootNode.data) {
-      console.log(rootNode);
+      printToPage(rootNode);
       return rootNode;
     } else if (number < rootNode.data) {
       find(value, rootNode.leftBranch);
     } else if (number > rootNode.data) {
       find(value, rootNode.rightBranch);
     } else {
-      console.log(`${value} doesn't appear to be a valid value`);
+      printToPage(`${value} doesn't appear to be a valid value`);
       return null;
     }
   }
-  console.log(`${value} was not found in this BST`);
+  printToPage(`${value} was not found in this BST`);
   return null;
 };
 
@@ -297,7 +306,7 @@ const depth = function (node, rootNode) {
   let depthCount = 0;
   const traverseTree = function (thisNode) {
     if (thisNode === null) {
-      console.log("This is awkward but that node wasn't found in the tree.");
+      printToPage("This is awkward but that node wasn't found in the tree.");
       return;
     }
     if (thisNode === rootNode) {
@@ -312,7 +321,7 @@ const depth = function (node, rootNode) {
         depthCount++;
         traverseTree(thisNode.rightBranch);
       } else {
-        console.log(
+        printToPage(
           "There seems to be an issue with traverseTree() inside of depth()"
         );
       }
@@ -322,21 +331,16 @@ const depth = function (node, rootNode) {
 };
 
 // isBalanced() return boolean
-const isBalanced = function (rootNode) {
-  const leftSide = rootNode.leftBranch;
-  const rightSide = rootNode.rightBranch;
-
-  if (leftSide === null) {
-    if (height(rightSide) > 1) {
+const isBalanced = function (node) {
+  if (node !== null) {
+    if (node.leftBranch === null && height(node.rightBranch) > 1) {
       return false;
-    }
-  } else if (rightSide === null) {
-    if (height(leftSide) > 1) {
+    } else if (node.rightBranch === null && height(node.leftBranch > 1)) {
       return false;
+    } else {
+      isBalanced(node.leftBranch);
+      isBalanced(node.rightBranch);
     }
-  } else if (leftSide !== undefined && rightSide !== undefined) {
-    isBalanced(leftSide);
-    isBalanced(rightSide);
   }
   return true;
 };
@@ -361,9 +365,9 @@ const test = function () {
 
   // Call isBalanced() to confirm balance of tree
   if (isBalanced(testTree)) {
-    console.log("Good; the tree is balanced!");
+    printToPage("Good; the tree is balanced!");
   } else {
-    console.log("Oh no; the tree is unbalanced!");
+    printToPage("Oh no; the tree is unbalanced!");
   }
 
   // Print out all elements in level, pre, post, and in order
@@ -372,14 +376,14 @@ const test = function () {
     const arrayPreOrder = preOrder(testTree);
     const arrayPostOrder = postOrder(testTree);
     const arrayInOrder = inOrder(testTree);
-    console.log("level order array:");
-    console.log(arrayLevelOrder);
-    console.log("pre order array:");
-    console.log(arrayPreOrder);
-    console.log("post order array:");
-    console.log(arrayPostOrder);
-    console.log("in order array:");
-    console.log(arrayInOrder);
+    printToPage("level order array:");
+    printToPage(arrayLevelOrder);
+    printToPage("pre order array:");
+    printToPage(arrayPreOrder);
+    printToPage("post order array:");
+    printToPage(arrayPostOrder);
+    printToPage("in order array:");
+    printToPage(arrayInOrder);
   };
   printOrderArrays();
 
@@ -389,15 +393,15 @@ const test = function () {
       const number = randomNumGen();
       insert(number, testTree);
     }
-    console.log("Random numbers added to the tree.");
+    printToPage("Random numbers added to the tree.");
   };
   addRandomNumbers();
 
   // Confirm that the tree is unbalanced by calling isBalanced
   if (isBalanced(testTree)) {
-    console.log("Oh no; the tree is balanced! (it shouldn't be at this point)");
+    printToPage("Oh no; the tree is balanced! (it shouldn't be at this point)");
   } else {
-    console.log(
+    printToPage(
       "Good; the tree is unbalanced! (it should be unbalanced here so good work)"
     );
   }
@@ -407,9 +411,9 @@ const test = function () {
 
   // Confirm that the tree is balanced by calling isBalanced()
   if (isBalanced(testTree)) {
-    console.log("Cool cool cool; the tree is balanced!");
+    printToPage("Cool cool cool; the tree is balanced!");
   } else {
-    console.log("Oh no; the tree is unbalanced!");
+    printToPage("Oh no; the tree is unbalanced!");
   }
 
   // Print out all elements in level, pre, post, and in order
