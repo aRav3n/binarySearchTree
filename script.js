@@ -1,11 +1,3 @@
-// Print items to web page instead of console
-const printToPage = function (itemToPrint) {
-  const bodyElement = document.querySelector("body");
-  const newP = document.createElement("p");
-  newP.innerHTML = itemToPrint;
-  bodyElement.appendChild(newP);
-};
-
 // nodeFactory return { data, leftNode, rightNode }
 const nodeFactory = function (data, leftBranch, rightBranch) {
   return { data, leftBranch, rightBranch };
@@ -48,8 +40,8 @@ const buildTree = function (array) {
 
   const arrayEnd = array.length - 1;
   const filteredArray = filterArray(array);
-  printToPage("filtered array:");
-  printToPage(filteredArray);
+  console.log("filtered array:");
+  console.log(filteredArray);
   const rootNode = getRootNode(filteredArray, 0, arrayEnd);
 
   return rootNode;
@@ -74,7 +66,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
       false
     );
   }
-  `printToPage`(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
   if (node.leftBranch !== null) {
     prettyPrint(node.leftBranch, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
@@ -187,14 +179,18 @@ const insert = function (value, rootNode) {
 
 // height(node) return height
 const height = function (rootNode) {
-  if (rootNode === null) {
+<<<<<<< HEAD
+  if (rootNode === null || rootNode === undefined) {
     return 0;
+=======
+  if (rootNode === null) {
+    return;
   }
   let leftHeight = 0;
   let rightHeight = 0;
   let maxHeight;
+  let rightBranchIsLonger = false;
 
-  printToPage(rootNode.leftBranch);
   if (rootNode.leftBranch !== null) {
     leftHeight++;
     leftHeight += height(rootNode.leftBranch).maxHeight;
@@ -202,23 +198,47 @@ const height = function (rootNode) {
 
   if (rootNode.rightBranch !== null) {
     rightHeight++;
-    rightHeight += height(rootNode.rightBranch).maxHeight;
+    rightHeight += height(rootNode).maxHeight;
   }
 
   if (rightHeight > leftHeight) {
     maxHeight = rightHeight;
+    rightBranchIsLonger = true;
+>>>>>>> parent of 9e64433 (Fix height())
   } else {
-    maxHeight = leftHeight;
-  }
+    let leftHeight = 0;
+    let rightHeight = 0;
+    let maxHeight;
 
-  return maxHeight;
+<<<<<<< HEAD
+    if (rootNode.leftBranch !== null && rootNode.leftBranch !== undefined) {
+      leftHeight++;
+      leftHeight += height(rootNode.leftBranch).maxHeight;
+    }
+
+    if (rootNode.rightBranch !== null && rootNode.rightBranch !== undefined) {
+      rightHeight++;
+      rightHeight += height(rootNode.rightBranch).maxHeight;
+    }
+
+    if (rightHeight > leftHeight) {
+      maxHeight = rightHeight;
+    } else {
+      maxHeight = leftHeight;
+    }
+
+    return maxHeight;
+  }
+=======
+  return { maxHeight, rightBranchIsLonger };
+>>>>>>> parent of 9e64433 (Fix height())
 };
 
 /* delete(value) 
 Don't use an array to do this, traverse and manipulate the nodes instead */
 const deleteItem = function (value, rootNode) {
   if (rootNode === null) {
-    printToPage(`Sorry, ${value} was not found in the BST`);
+    console.log(`Sorry, ${value} was not found in the BST`);
   }
   const number = Number(value);
   if (number === rootNode.data) {
@@ -246,18 +266,18 @@ const find = function (value, rootNode) {
   if (rootNode !== null) {
     const number = Number(value);
     if (number === rootNode.data) {
-      printToPage(rootNode);
+      console.log(rootNode);
       return rootNode;
     } else if (number < rootNode.data) {
       find(value, rootNode.leftBranch);
     } else if (number > rootNode.data) {
       find(value, rootNode.rightBranch);
     } else {
-      printToPage(`${value} doesn't appear to be a valid value`);
+      console.log(`${value} doesn't appear to be a valid value`);
       return null;
     }
   }
-  printToPage(`${value} was not found in this BST`);
+  console.log(`${value} was not found in this BST`);
   return null;
 };
 
@@ -306,7 +326,7 @@ const depth = function (node, rootNode) {
   let depthCount = 0;
   const traverseTree = function (thisNode) {
     if (thisNode === null) {
-      printToPage("This is awkward but that node wasn't found in the tree.");
+      console.log("This is awkward but that node wasn't found in the tree.");
       return;
     }
     if (thisNode === rootNode) {
@@ -321,7 +341,7 @@ const depth = function (node, rootNode) {
         depthCount++;
         traverseTree(thisNode.rightBranch);
       } else {
-        printToPage(
+        console.log(
           "There seems to be an issue with traverseTree() inside of depth()"
         );
       }
@@ -362,12 +382,13 @@ const test = function () {
   };
   const array = randomArray();
   let testTree = treeFactory(array);
+  prettyPrint(testTree);
 
   // Call isBalanced() to confirm balance of tree
   if (isBalanced(testTree)) {
-    printToPage("Good; the tree is balanced!");
+    console.log("Good; the tree is balanced!");
   } else {
-    printToPage("Oh no; the tree is unbalanced!");
+    console.log("Oh no; the tree is unbalanced!");
   }
 
   // Print out all elements in level, pre, post, and in order
@@ -376,14 +397,14 @@ const test = function () {
     const arrayPreOrder = preOrder(testTree);
     const arrayPostOrder = postOrder(testTree);
     const arrayInOrder = inOrder(testTree);
-    printToPage("level order array:");
-    printToPage(arrayLevelOrder);
-    printToPage("pre order array:");
-    printToPage(arrayPreOrder);
-    printToPage("post order array:");
-    printToPage(arrayPostOrder);
-    printToPage("in order array:");
-    printToPage(arrayInOrder);
+    console.log("level order array:");
+    console.log(arrayLevelOrder);
+    console.log("pre order array:");
+    console.log(arrayPreOrder);
+    console.log("post order array:");
+    console.log(arrayPostOrder);
+    console.log("in order array:");
+    console.log(arrayInOrder);
   };
   printOrderArrays();
 
@@ -393,15 +414,15 @@ const test = function () {
       const number = randomNumGen();
       insert(number, testTree);
     }
-    printToPage("Random numbers added to the tree.");
+    console.log("Random numbers added to the tree.");
   };
   addRandomNumbers();
 
   // Confirm that the tree is unbalanced by calling isBalanced
   if (isBalanced(testTree)) {
-    printToPage("Oh no; the tree is balanced! (it shouldn't be at this point)");
+    console.log("Oh no; the tree is balanced! (it shouldn't be at this point)");
   } else {
-    printToPage(
+    console.log(
       "Good; the tree is unbalanced! (it should be unbalanced here so good work)"
     );
   }
@@ -411,9 +432,9 @@ const test = function () {
 
   // Confirm that the tree is balanced by calling isBalanced()
   if (isBalanced(testTree)) {
-    printToPage("Cool cool cool; the tree is balanced!");
+    console.log("Cool cool cool; the tree is balanced!");
   } else {
-    printToPage("Oh no; the tree is unbalanced!");
+    console.log("Oh no; the tree is unbalanced!");
   }
 
   // Print out all elements in level, pre, post, and in order
